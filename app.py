@@ -11,11 +11,20 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 
 with app.app_context():
-    db.create_all()
+    import application.controllers
 
-@app.route("/")
-def index():
-    return "Welcome to my Trekking App!"
+def init_database():
+    with app.app_context():
+        db.create_all()
+
+        admin = User.query.filter_by(role = "Admin").first()
+        if not admin:
+            admin = User(name = "Admin", email = "admin@gmail.com", password = "admin123", role = "Admin")
+            db.session.add(admin)
+            db.session.commit()
+
+
 
 if __name__ == "__main__":
+    init_database()
     app.run(debug=True)
