@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block public_content %}
+<div class="container">
+    <h1 style="text-align: center; font: bold;">Login</h1>
+    <form method="post">
+            <div class="field"><input name = "email" placeholder="Enter your email here" required></div>
+            <div class="field"><input name = "password" type="password" placeholder="Enter your password" required></div>
+            <div class="field"><button>Login</button></div>
+    </form>
+    <p style="text-align: center; color: rgb(248, 91, 230);">Don't have Account? <a href="{{ url_for('register') }}" >Register Here</a></p>
+    
+</div>
+{% endblock %}

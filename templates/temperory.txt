@@ -1,0 +1,28 @@
+{% if session.get('user_id') %}
+    <div class="app">
+        <div class="sidebar">
+            {% if session.get('role')== "Admin" %}
+                <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('admin_treks') }}">Treks</a>
+                <a href="{{ url_for('admin_staff') }}">Staff</a>
+                <a href="{{ url_for('admin_users') }}">Users</a>
+                <a href="{{ url_for('admin_bookings') }}">Bookings</a>
+            {% elif session.get('role')== "staff" %}
+                <a href="{{ url_for('staff_dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('staff_dashboard') }}">My Treks</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+            {% else %}
+                <a href="{{ url_for('user_dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('user_dashboard') }}">Browse Trek</a>
+                <a href="{{ url_for('my_bookings') }}">My Bookings</a>
+                <a href="{{ url_for('history') }}">History</a>
+                <a href="{{ url_for('profile') }}">Profile</a>
+            {% endif %}
+            <a href="url_for('logout')">Logout</a>
+        </div>
+        <div class="Content">
+            {% block content %} {% endblock %}
+        </div>
+    </div>
+    {% else %}
+    {% endif %}

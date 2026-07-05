@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block public_content %}
+<h2>{% if trek %}Edit Trek{% else %}Add New Trek{% endif %}</h2>
+<form method="post">
+    <div class="form-grid">
+        <div class="field"><label>Trek Name</label><input name="name" value="{{ trek.name if trek else '' }}" required></div>
+        <div class="field"><label>Location</label><input name="location" value="{{ trek.location if trek else '' }}" required></div>
+        <div class="field"><label>Difficulty</label>
+            <select name="difficulty">
+                {% for d in ['Easy','Moderate','Hard'] %}
+                <option value="{{ d }}" {% if trek and trek.difficulty==d %}selected{% endif %}>{{ d }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="field"><label>Duration Days</label><input name="duration" type="number"
+                value="{{ trek.duration if trek else 1 }}" required></div>
+        <div class="field"><label>Available Slots</label><input name="available_slots" type="number"
+                value="{{ trek.available_slots if trek else 10 }}" required></div>
+    
+        <div class="field"><label>Start Date</label><input name="start_date" type="date"
+                value="{{ trek.start_date if trek else '' }}"></div>
+        <div class="field"><label>End Date</label><input name="end_date" type="date"
+                value="{{ trek.end_date if trek else '' }}"></div>
+        <div class="field"><label>Assign Staff</label>
+            <select name="assigned_staff">
+                <option value="">--Select Staff--</option>
+                {% for s in staff %}
+                <option value="{{ s.id }}" {% if trek and trek.assigned_staff==s.id %}selected{% endif %}>{{ s.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="field" style="height: auto;"><label>Status</label>
+            <select name="status">
+                {% for s in ['Approved','Pending','Open','Close','Completed'] %}
+                <option value="{{ s }}" {% if trek and trek.status==s %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="field"><label>Description</label><textarea name="description"
+                rows="5">{{ trek.description if trek else '' }}</textarea></div>
+    </div>
+    <a class="btn btn-light" href="{{ url_for('admin_treks') }}">Cancel</a>
+    <button>Save</button>
+</form>
+{% endblock %}

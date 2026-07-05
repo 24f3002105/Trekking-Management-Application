@@ -27,16 +27,16 @@ class Trek(db.Model):
     __tablename__ = "treks"
     
     id = db.Column(db.Integer, primary_key = True)
-    trek_name = db.Column(db.String(100), nullable = False)
+    name = db.Column(db.String(100), nullable = False)
     location = db.Column(db.String(100), nullable = False)
-    difficulty_level = db.Column(db.String(50), nullable = False)
+    difficulty = db.Column(db.String(50), nullable = False)
     duration = db.Column(db.Integer, nullable = False)
     available_slots = db.Column(db.Integer, nullable = False)
     assigned_staff_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     status = db.Column(db.String(30), default="open")
     start_date = db.Column(db.String(20))
     end_date = db.Column(db.String(20))
-    about = db.Column(db.Text)
+    description = db.Column(db.Text)
 
     bookings = db.relationship('Booking', backref = 'Trek', lazy = True)
 

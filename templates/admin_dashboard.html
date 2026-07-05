@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block public_content %}
+<h2>Dashboard</h2>
+<div class="cards">
+    <div class="card">Total Treks <h3>{{ totals.treks }}</h3></div>
+    <div class="card">Total Users <h3>{{ totals.users }}</h3></div>
+    <div class="card">Total Staff <h3>{{ totals.staff }}</h3></div>
+    <div class="card">Total Bookings <h3>{{ totals.bookings }}</h3></div>
+</div>
+<h3>Recent Bookings</h3>
+<table>
+    <tr><th>Booking ID</th><th>User</th><th>Trek</th><th>Booking Date</th><th>Status</th></tr>
+    {% for b in Bookings %}
+    <tr><td>{{ b.id }}</td><td>{{ b.user_name }}</td><td>{{ b.trek_name }}</td><td>{{ b.booking_date }}</td><td>{{ b.status}}</td></tr>
+
+    {% endfor %}
+
+</table>
+{% endblock %}

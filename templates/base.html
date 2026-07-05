@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>TREKKING-MANAGEMENT-APPLICATION</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="topbar">
+        <b>TREKKING-MANAGEMENT-APPLICATION</b>
+        {% if session.get('user_id') %}
+        <span>{{ session.get('name') }} | <a href="{{ url_for('logout') }}">Logout</a></span>
+        {% endif %}
+    </div>
+    
+    {% block public_content %}
+    {% endblock %}
+    
+</body>
+
+</html>

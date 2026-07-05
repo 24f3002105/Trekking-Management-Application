@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block public_content %}
+<h2>Staff Requests</h2>
+<table>
+    <tr><th>Staff ID</th><th>Name</th><th>Email</th><th>Contact</th><th>Status</th><th>Action</th></tr>
+    {% for s in staff %}
+    <tr>
+        <td>{{ s.id }}</td><td>{{ s.name }}</td><td>{{ s.email }}</td><td>{{ s.contact }}</td>
+        <td>{% if s.blacklisted %}Blacklisted{% elif s.approved %}Approved{% else %}Pending{% endif %}</td>
+        <td>
+            <a class="btn btn-small btn-green" href="{{ url_for('staff_action', user_id=s.id, action='approved') }}">Approve</a>
+            <a class="btn btn-small btn-red" href="{{ url_for('staff_action', user_id=s.id, action='blacklist') }}">Blacklist</a>
+            <a class="btn btn-small btn-light" href="{{ url_for('staff_action', user_id=s.id, action='remove') }}">Remove</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

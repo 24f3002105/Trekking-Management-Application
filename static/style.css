@@ -1,0 +1,61 @@
+.topbar {
+    height: 46px;border-bottom: 2px grey;background-color: rgb(218, 237, 246);
+    display: flex;justify-content: space-between;align-items: center;padding:0 20px;
+}
+a { color: blue; text-decoration:solid;}
+.container { width: 350px; margin: auto; border: 2px solid; background-color: beige;
+padding: 30px; border-radius: 50px; margin-top: 50px;}
+
+.field { margin-bottom: 14px; text-align: center; font-size: large;}
+
+button, .btn {
+    display:inline-block;
+    border: solid blue;
+    background: blue;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid lightskyblue;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+
+table { width: 100%; border-collapse: collapse; background: azure;}
+th, td {border: 2px solid; padding: 10px; text-align: left;}
+th {background-color:rgb(216, 247, 235) ;}
+.cards {display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 30px;}
+.card {border: 2px solid rgb(214, 214, 246); background: lightyellow; padding: 20px; border-radius: 5px; color: blue;font: bolder;}
+.card h3 { margin: 4px 0 0; font-size: 30px; color: cornflowerblue;}
+
+.title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; background: rgb(218, 231, 198);font-size: larger;}
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px;}
+
+.btn-small { padding: 4px 8px; font-size: 12px; }
+.btn-light { background: white; color: #0d6efd; }
+.btn-red { background: #dc3545; border-color: #dc3545; }
+.btn-green { background: #198754; border-color: #198754; }
+
+.placeholder {
+    width: 220px;
+    height: 140px;
+    background: #e9ecef;
+    border: 1px solid #d0d5da;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #777;
+}
+
+@media (max-width: 800px) {
+    .cards, .form-grid { grid-template-columns: 1fr; }
+    .sidebar { width: 130px; }
+    .login-box { width: auto; margin: 30px 15px; }
+}
+

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block public_content %}
+<div class="title-row">
+    <h2 style="color: darkslateblue;">Treks</h2>
+    <a class="btn" href="{{ url_for('add_trek') }}">+ Add New Trek</a>
+</div>
+<form method="get" class="field">
+    <input name="q" value="{{ q }}" placeholder="Search by trek name and location">
+</form>
+<table>
+    <tr><th>ID</th><th>Trek Name</th><th>Location</th><th>Difficulty</th><th>Slots</th><th>Staff</th><th>Status</th><th>Actions</th></tr>
+    {% for t in treks %}
+    <tr>
+        <td>{{ t.id }}</td><td>{{ t.name }}</td><td>{{ t.location }}</td><td>{{ t.difficulty }}</td><td>{{ t.available_slots }}</td><td>{{ t.staff_name or "-" }}</td><td>{{ t.status }}</td>
+        <td>
+            <a class="btn btn-small btn-light" href="{{ url_for('edit_trek', trek_id=t.id) }}">Edit</a>
+            <a class="btn btn-small btn-red" href="{{ url_for('delete_trek', trek_id=t.id) }}">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
