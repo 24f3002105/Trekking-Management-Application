@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block public_content %}
+<p><a href="{{ url_for('user_dashboard') }}">&lt; Back to Treks</a></p>
+<h2>{{ trek.name }}</h2>
+<div style="display: flex; gap: 22px; align-items: flex-start;">
+    <img src="{{ url_for('static', filename='images/' + trek.image) }}"
+     alt="{{ trek.name }}"
+     width="350">
+     <div>
+        <p><b>Location: </b>{{ trek.location }}</p>
+        <p><b>Difficulty: </b>{{ trek.difficulty }}</p>
+        <p><b>Duration: </b>{{ trek.duration }}</p>
+        <p><b>Start Date:</b> {{ trek.start_date }}</p>
+        <p><b>End Date:</b> {{ trek.end_date }}</p>
+        <p><b>Available Slots:</b> {{ trek.available_slots }}</p>
+        <p><b>Status:</b> {{ trek.status }}</p>
+     </div>
+</div>
+<h3>Description</h3>
+<p>{{ trek.description }}</p>
+{% if trek.status == 'Open' %}
+<p style="text-align:center;"><a class="btn" href="{{ url_for('book_trek', trek_id=trek.id) }}">Book Now</a></p>
+{% else %}
+<p>This trek is not open for booking.</p>
+{% endif %}
+{% endblock %}
+

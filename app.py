@@ -59,6 +59,7 @@ def init_database():
                 start_date="2026-05-20",
                 end_date="2026-05-31",
                 description="Simple trek description.",
+                image="everestbasecamp.jpg",
             )
             trek2 = Trek(
                 name="Roopkund Trek",
@@ -71,6 +72,7 @@ def init_database():
                 start_date="2026-04-10",
                 end_date="2026-04-16",
                 description="Simple trek description.",
+                image="ropkundtrek.jpg",
             )
             trek3 = Trek(
                 name="Kedarkantha Trek",
@@ -83,6 +85,7 @@ def init_database():
                 start_date="2026-05-10",
                 end_date="2026-05-14",
                 description="Simple trek description.",
+                image="kedarkanthatrek.jpg",
             )
             trek4 = Trek(
                 name="Hampta Pass",
@@ -94,7 +97,9 @@ def init_database():
                 start_date="2026-03-18",
                 end_date="2026-03-22",
                 description="Simple trek description.",
+                image="hamptapasstrek.jpg"
             )
+            
             db.session.add_all([trek1, trek2, trek3, trek4])
             db.session.commit()
 

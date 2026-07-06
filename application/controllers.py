@@ -324,9 +324,74 @@ def staff_trek(trek_id):
         })
     return render_template("staff_trek.html", trek=trek, participants=participant_rows)
 
-
-
+@app.route("/user")
+def user_dashboard():
+    if session.get("role") != "user":
+        return redirect("/login")
     
+    difficulty = request.args.get("difficulty", "")
+    location = request.args.get("location","")
+
+    trek_query = Trek.query.filter_by(status="Open")
+    if difficulty:
+        trek_query = trek_query.filter_by(difficulty=difficulty)
+    if location:
+        trek_query = trek_query.filter(Trek.location.like("%" + location +  "%"))
+    
+    treks=trek_query.all()
+
+    bookings=Booking.query.filter_by(user_id=session.get("user_id")).order_by(Booking.id.desc()).all()
+    booking_rows = []
+    for booking in bookings:
+        trek = Trek.query.get(booking.trek_id)
+        booking_rows.append({
+            "id": booking.id,
+            "trek_name": trek.name,
+            "booking_date": booking.booking_date,
+            "status": booking.status,
+        })
+
+    return render_template("user_dashboard.html", treks=treks, bookings=booking_rows, difficulty=difficulty, location=location)
+
+@app.route("/trek/<int:trek_id>")
+def trek_detail(trek_id):
+    if session.get("role") != "user":
+        return redirect("/login")
+    trek=Trek.query.get_or_404(trek_id)
+    return render_template("trek_detail.html", trek=trek)
+
+@app.route("/book/<int:trek_id>")
+def book_trek(trek_id):
+    if session.get("role") != "user":
+        return redirect("/login")
+    trek = Trek.query.get_or_404(trek_id)
+
+    old_booking = Booking.query.filter_by(user_id=session.get("user_id"), trek_id=trek.id).first()
+    booked_count = Booking.query.filter_by(trek_id=trek.id, status="Booked").count()
+
+    if old_booking:
+        return redirect("/user")
+    
+    if trek.status != "Open":
+        return redirect("/user")
+    
+    if booked_count >= trek.available_slots:
+        return redirect("/user")
+    
+    booking=Booking(
+        user_id=session.get("user_id"),
+        trek_id=trek.id,
+        booking_date=str(date.today()),
+        status="Booked",
+        payment_status="Paid",
+    )
+    db.session.add(booking)
+    db.session.commit()
+    return redirect("/user")
+
+
+
+
         
 
 

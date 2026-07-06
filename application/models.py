@@ -37,7 +37,7 @@ class Trek(db.Model):
     start_date = db.Column(db.String(20))
     end_date = db.Column(db.String(20))
     description = db.Column(db.Text)
-
+    image = db.Column(db.String(200))
     bookings = db.relationship('Booking', backref = 'Trek', lazy = True)
 
 class Booking(db.Model):

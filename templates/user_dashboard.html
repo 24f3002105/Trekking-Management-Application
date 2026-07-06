@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block public_content %}
+<h2>Welcome, {{ session.get('name') }}!</h2>
+<div class="title-row">
+    <h3>Available Treks</h3>
+    <form method="get" style="display:flex; gap: 10px;">
+        <select name="difficulty">
+            <option value="">Difficulty: All</option>
+            {% for d in ['Easy','Moderate','Hard'] %}
+            <option value="{{ d }}" {% if difficulty==d %}selected{% endif %}>{{ d }}</option>
+            {% endfor %}
+        </select>
+        <input name="location" value="{{ location }}" placeholder="Location">
+        <button>Search</button>
+    </form>
+</div>
+<table>
+    <tr><th>Trek Name</th><th>Location</th><th>Difficulty</th><th>Duration</th><th>Available Slots</th><th>Action</th></tr>
+    {% for t in treks %}
+    <tr>
+        <td>{{ t.name }}</td><td>{{ t.location }}</td><td>{{ t.difficulty }}</td><td>{{ t.duration }} Days</td><td>{{ t.available_slots }}</td>
+        <td><a class="btn btn-small" href="{{ url_for('trek_detail', trek_id=t.id) }}">View</a></td>
+    </tr>
+    {% endfor %}
+</table>
+<h3>My Bookings</h3>
+<table>
+    <tr><th>Trek Name</th><th>Booking Date</th><th>Status</th><th>Action</th></tr>
+    {% for b in bookings[:4] %}
+    <tr><td>{{ b.trek_name }}</td><td>{{ b.booking_date }}</td><td>{{ b.status }}</td>
+    <td><a class="btn btn-small btn-light" href="{{ url_for('my_bookings') }}">View Details</a></td></tr>
+    {% endfor %}
+</table>
+{% endblock %}
