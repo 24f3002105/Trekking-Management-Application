@@ -272,8 +272,57 @@ def admin_bookings():
         })
     return render_template("admin_bookings.html", bookings=booking_rows)
 
+@app.route("/staff")
+def staff_dashboard():
+    if session.get("role") != "staff":
+        return redirect("/login")
+    
+    treks = Trek.query.filter_by(assigned_staff_id=session.get("user_id")).all()
+    trek_rows =[]
+    for trek in treks:
+        count=Booking.query.filter_by(trek_id=trek.id,status="Booked").count()
+        trek_rows.append({
+            "id":trek.id,
+            "name":trek.name,
+            "location":trek.location,
+            "participant_count":count,
+            "available_slots":trek.available_slots,
+            "status":trek.status,
+        })
 
+    return render_template("staff_dashboard.html", treks=trek_rows)
 
+@app.route("/staff/trek/<int:trek_id>",methods=["GET","POST"])
+def staff_trek(trek_id):
+    if session.get("role") != "staff":
+        return redirect("/login")
+    trek = Trek.query.get_or_404(trek_id)
+    if trek.assigned_staff_id != session.get("user_id"):
+        return redirect("/staff")
+    
+    if request.method == "POST":
+        trek.available_slots = request.form.get("available_slots")
+        trek.status = request.form.get("status")
+        
+        if trek.status == "Completed":
+            bookings=Booking.query.filter_by(trek_id=trek.id, status="Booked").all()
+            for booking in bookings:
+                booking.status="Completed"
+        
+        db.session.commit()
+        return redirect("staff/trek/" + str(trek.id))
+    
+    participant_rows = []
+    bookings = Booking.query.filter_by(trek_id=trek.id).all()
+    for booking in bookings:
+        user = User.query.get(booking.user_id)
+        participant_rows.append({
+            "user_name":user.name,
+            "email":user.email,
+            "booking_date":booking.booking_date,
+            "status":booking.status,
+        })
+    return render_template("staff_trek.html", trek=trek, participants=participant_rows)
 
 
 

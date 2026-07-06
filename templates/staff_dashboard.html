@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block public_content %}
+<h2>My Dashboard</h2>
+<div class="cards">
+    <div class="card">Assigned Treks<h3>{{ treks|length }}</h3></div>
+    <div class="card">Total Participants<h3>{{ treks|sum(attribute='participant_count') }}</h3></div>
+    <div class="card">Open Treks<h3>{{ treks|selectattr('status', 'equalto', 'Open')|list|length }}</h3></div>
+    <div class="card">Role<h3>Staff</h3></div>
+</div>
+<h3>My Assigned Treks</h3>
+<table>
+    <tr><th>Trek Name</th><th>Location</th><th>Participants</th><th>Slots</th><th>Status</th><th>Action</th></tr>
+    {% for t in treks %}
+    <tr>
+        <td>{{ t.name }}</td><td>{{ t.location }}</td><td>{{ t.participant_count }}</td>
+        <td>{{ t.available_slots }}</td><td>{{ t.status }}</td>
+        <td><a class="btn btn-small btn-light" href="{{ url_for('staff_trek', trek_id=t.id) }}">Manage</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block public_content %}
+<h2>{{ trek.name }}</h2>
+<div class="card">
+    <h3>Trek Information</h3>
+    <form method="post">
+        <div class="form-grid">
+            <div>
+                <p><b>Location: </b>{{ trek.location }}</p>
+                <p><b>Duration: </b>{{ trek.duration }} Days</p>
+                <p><b>Start Date: </b>{{ trek.start_date }}</p>
+                <p><b>End Date: </b>{{ trek.end_date }}</p>
+            </div>
+            <div>
+                <div class="field"><label>Available Slots</label><input name="available_slots" type="number" value="{{ trek.available_slots }}"></div>
+                <div class="field"><label>Status</label>
+                <select name="status">
+                    {% for s in ['Open','Closed','Started','Ongoing','Completed'] %}
+                    <option value="{{ s }}" {% if trek.status==s %}selected{% endif %}>{{ s }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button>Update Trek</button>
+            </div>
+        </div>
+    </form>
+</div>
+<h3>Participants ({{ participants|length }})</h3>
+<table>
+    <tr><th>User Name</th><th>Email</th><th>Booking Date</th><th>Status</th></tr>
+    {% for p in participants %}
+    <tr><td>{{ p.user_name }}</td><td>{{ p.email }}</td><td>{{ p.booking_date }}</td><td>{{ p.status }}</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}
