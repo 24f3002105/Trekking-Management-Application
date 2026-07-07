@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>My Bookings</h2>
+<table>
+    <tr><th>Trek Name</th><th>Booking Date</th><th>Trek Dates</th><th>Status</th><th>Action</th></tr>
+    {% for b in bookings %}
+    <tr>
+        <td>{{ b.trek_name }}</td><td>{{ b.booking_date }}</td><td>{{ b.start_date }} - {{ b.end_date }}</td><td>{{ b.status }}</td>
+        <td>
+            {% if b.status == 'Booked' %}
+            <a class="btn btn-small btn-red" href="{{ url_for('cancel_booking', booking_id=b.id) }}">Cancel</a>
+            {% else %}
+            -
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

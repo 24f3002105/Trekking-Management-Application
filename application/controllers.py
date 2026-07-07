@@ -215,7 +215,7 @@ def staff_action(user_id, action):
         staff.blacklisted=False
         profile = StaffProfile.query.filter_by(user_id=staff.id).first()
         if profile:
-            profile.status="Approved"
+            profile.status = "Approved"
     elif action=="blacklist":
         staff.blacklisted=True
         profile=StaffProfile.query.filter_by(user_id=staff.id).first()
@@ -225,7 +225,7 @@ def staff_action(user_id, action):
         db.session.delete(staff)
 
     db.session.commit()
-    return redirect("admin/staff")
+    return redirect("/admin/staff")
 
 @app.route("/admin/users")
 def admin_users():
@@ -389,8 +389,71 @@ def book_trek(trek_id):
     db.session.commit()
     return redirect("/user")
 
+@app.route("/bookings")
+def my_bookings():
+    if session.get("role") != "user":
+        return redirect("/login")
+    
+    bookings = Booking.query.filter_by(user_id=session.get("user_id")).order_by(Booking.id.desc()).all()
+    booking_rows = []
+    for booking in bookings:
+        trek = Trek.query.get(booking.id)
+        booking_rows.append({
+            "id": booking.id,
+            "trek_name": trek.name,
+            "booking_date": booking.booking_date,
+            "start_date": trek.start_date,
+            "end_date": trek.end_date,
+            "status": booking.status,
+        })
 
+    return render_template("my_bookings.html", bookings=booking_rows)
 
+@app.route("/booking/<int:booking_id>/cancel")
+def cancel_booking(booking_id):
+    if session.get("role") != "user":
+        return redirect("/login")
+    
+    booking = Booking.query.get_or_404(booking_id)
+    if booking.user_id == session.get("user_id") and booking.status == "Booked":
+        booking.status = "Cancelled"
+        db.session.commit()
+    
+    return redirect("/bookings")
+
+@app.route("/history")
+def history():
+    if session.get("role") != "user":
+        return redirect("/login")
+    
+    bookings=Booking.query.filter_by(user_id=session.get("user_id")).all()
+    history_rows = []
+    for booking in bookings:
+        if booking.status in ["Completed","Cancelled"]:
+            trek = Trek.query.filter_by(booking.trek_id)
+            history_rows.append({
+                "trek_name":trek.name,
+                "start_date":trek.start_date,
+                "end_date":trek.end_date,
+                "status":booking.status,
+            })
+    return render_template("history.html", bookings=history_rows)
+
+@app.route("/profile", methods=["GET", "POST"])
+def profile():
+    if not session.get("user_id"):
+        return redirect("/login")
+    
+    user=User.query.get_or_404(session.get("user_id"))
+
+    if request.method == "POST":
+        user.name = request.form.get("name")
+        user.contact=request.form.get("contact")
+        session["name"]=user.name
+        db.session.commit()
+        return redirect("/profile")
+    
+    return render_template("profile.html", user=user)
 
         
 

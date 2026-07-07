@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Profile</h2>
+<form method="post" style="max-width: 430px;">
+    <div class="field"><label>Name</label><input name="name" value="{{ user.name }}"></div>
+    <div class="field"><label>Email</label><input value="{{ user.email }}" disabled></div>
+    <div class="field"><label>Contact</label><input name="contact" value="{{ user.contact or '' }}"></div>
+    <button>Update Profile</button>
+</form>
+{% endblock %}
