@@ -3,9 +3,12 @@
 <p><a href="{{ url_for('user_dashboard') }}">&lt; Back to Treks</a></p>
 <h2>{{ trek.name }}</h2>
 <div style="display: flex; gap: 22px; align-items: flex-start;">
+    {% if trek.image %}
     <img src="{{ url_for('static', filename='images/' + trek.image) }}"
-     alt="{{ trek.name }}"
-     width="350">
+         width="350">
+    {% else %}
+        <div class="placeholder">No Image</div>
+    {% endif %}
      <div>
         <p><b>Location: </b>{{ trek.location }}</p>
         <p><b>Difficulty: </b>{{ trek.difficulty }}</p>

@@ -2,6 +2,8 @@ from datetime import date
 from application.models import db, User, StaffProfile, Trek, Booking
 from flask import current_app as app
 from flask import redirect, request, render_template, session
+import os
+from werkzeug.utils import secure_filename
 
 @app.route("/")
 def home():
@@ -62,12 +64,12 @@ def register():
             approved = approved_status,
         )
         db.session.add(new_user)
-        db.commit()
+        db.session.commit()
 
         if role == "staff":
             profile = StaffProfile(user_id=new_user.id, contact=contact, status ="Pending")
             db.session.add(profile)
-            db.commit()
+            db.session.commit()
 
         return redirect("/login")
     
@@ -113,7 +115,7 @@ def admin_treks():
     search_text=request.args.get("q","")
     if search_text:
         treks = Trek.query.filter(
-            (Trek.name.like("%" + search_text + "%"))
+            (Trek.name.like("%" + search_text + "%")) |
             (Trek.location.like("%" + search_text + "%"))
             
         ).all()
@@ -145,6 +147,13 @@ def add_trek():
         return redirect("/login")
 
     if request.method=="POST":
+        image = request.files.get("image")
+
+        filename = None
+
+        if image and image.filename:
+            filename = secure_filename(image.filename)
+            image.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
         trek = Trek(
             name = request.form.get("name"),
             location=request.form.get("location"),
@@ -156,10 +165,11 @@ def add_trek():
             start_date=request.form.get("start_date"),
             end_date=request.form.get("end_date"),
             description=request.form.get("description"),
+            image=filename,
         )
         db.session.add(trek)
         db.session.commit()
-        return redirect("admin/treks")
+        return redirect("/admin/treks")
     staff = User.query.filter_by(role="staff", approved = True, blacklisted = False).all()
     return render_template("trek_form.html", staff=staff, trek=None)
 
@@ -180,6 +190,13 @@ def edit_trek(trek_id):
         trek.start_date=request.form.get("start_date")
         trek.end_date=request.form.get("end_date")
         trek.description=request.form.get("description")
+        image = request.files.get("image")
+
+        if image and image.filename:
+            filename = secure_filename(image.filename)
+            image.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+            trek.image = filename
+        
         db.session.commit()
         return redirect("/admin/treks")
     staff=User.query.filter_by(role="staff", approved=True, blacklisted=False).all()
@@ -397,7 +414,7 @@ def my_bookings():
     bookings = Booking.query.filter_by(user_id=session.get("user_id")).order_by(Booking.id.desc()).all()
     booking_rows = []
     for booking in bookings:
-        trek = Trek.query.get(booking.id)
+        trek = Trek.query.get(booking.trek_id)
         booking_rows.append({
             "id": booking.id,
             "trek_name": trek.name,
@@ -430,7 +447,7 @@ def history():
     history_rows = []
     for booking in bookings:
         if booking.status in ["Completed","Cancelled"]:
-            trek = Trek.query.filter_by(booking.trek_id)
+            trek = Trek.query.get(booking.trek_id)
             history_rows.append({
                 "trek_name":trek.name,
                 "start_date":trek.start_date,

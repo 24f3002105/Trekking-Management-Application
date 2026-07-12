@@ -1,0 +1,28 @@
+Flask
+Flask-SQLAlchemy
+Werkzueg
+
+code to download venv:
+python3 -m venv .venv
+
+activate the venv
+source .venv/bin/activate
+
+code to install flask,flask-SQLAlchemy, Werkzueg
+pip install flask flask-sqlalchemy werkzeug
+
+
+code to do checksum
+pip install checksumdir
+# check.py
+import checksumdir 
+
+# Replace "folder_name" with the actual folder path
+hash = checksumdir.dirhash("folder_name")
+print("Directory Checksum:", hash)
+
+
+git commit
+git add .
+git commit -m "Initial commit with Flask framework"
+git push -u origin main

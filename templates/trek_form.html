@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>{% if trek %}Edit Trek{% else %}Add New Trek{% endif %}</h2>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div class="form-grid">
         <div class="field"><label>Trek Name</label><input name="name" value="{{ trek.name if trek else '' }}" required></div>
         <div class="field"><label>Location</label><input name="location" value="{{ trek.location if trek else '' }}" required></div>
@@ -22,7 +22,7 @@
         <div class="field"><label>End Date</label><input name="end_date" type="date"
                 value="{{ trek.end_date if trek else '' }}"></div>
         <div class="field"><label>Assign Staff</label>
-            <select name="assigned_staff">
+            <select name="assigned_staff_id">
                 <option value="">--Select Staff--</option>
                 {% for s in staff %}
                 <option value="{{ s.id }}" {% if trek and trek.assigned_staff==s.id %}selected{% endif %}>{{ s.name }}
@@ -39,6 +39,9 @@
         </div>
         <div class="field"><label>Description</label><textarea name="description"
                 rows="5">{{ trek.description if trek else '' }}</textarea></div>
+        <div class="field">
+            <label>Trek Image</label><input type="file" name="image" accept="image/*">
+        </div>
     </div>
     <a class="btn btn-light" href="{{ url_for('admin_treks') }}">Cancel</a>
     <button>Save</button>

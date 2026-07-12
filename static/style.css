@@ -74,4 +74,13 @@ body {
     font-size: 14px;
 }
 
-
+.placeholder {
+    width: 220px;
+    height: 140px;
+    background: #e9ecef;
+    border: 1px solid #d0d5da;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #777;
+}

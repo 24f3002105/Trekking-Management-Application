@@ -31,7 +31,7 @@
                 <a href="{{ url_for('history') }}">History</a>
                 <a href="{{ url_for('profile') }}">Profile</a>
             {% endif %}
-            <a href="url_for('logout')">Logout</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
         </div>
         <div class="content">
             {% block content %} {% endblock %}
